@@ -7,7 +7,7 @@ export default async function logout(req, res) {
   const client = getClient(token)
 
   await Promise.all([
-    client.query(q.Logout()),
+    client.query(q.Logout(true)),
     magic.users.logoutByIssuer(issuer)
   ])
 

@@ -22,9 +22,8 @@ const Login = () => {
 
     try {
       const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
-      const didToken = await magic.auth.loginWithMagicLink({
-        email: body.email,
-      })
+      await magic.auth.loginWithMagicLink({ email: body.email })
+      const didToken = await magic.user.generateIdToken({ attachment: 'todomvc' })
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: {

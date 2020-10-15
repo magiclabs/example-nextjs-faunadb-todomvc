@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "@hapi/iron": "6.0.0",
-    "@magic-sdk/admin": "1.0.0",
+    "@magic-sdk/admin": "1.2.2",
     "cookie": "0.4.0",
     "faunadb": "^3.0.1",
-    "magic-sdk": "1.0.1",
+    "magic-sdk": "2.7.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
