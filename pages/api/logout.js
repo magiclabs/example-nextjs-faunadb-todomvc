@@ -1,11 +1,18 @@
 import { magic } from '../../lib/magic'
-import { removeTokenCookie } from '../../lib/auth-cookies'
-import { getSession } from '../../lib/iron'
+import { getClient, q } from '../../lib/faunadb'
+import { getSession, removeSession } from '../../lib/auth-cookies'
 
 export default async function logout(req, res) {
-  const session = await getSession(req)
-  await magic.users.logoutByIssuer(session.issuer)
-  removeTokenCookie(res)
+  const { token, issuer } = await getSession(req)
+  const client = getClient(token)
+
+  await Promise.all([
+    client.query(q.Logout()),
+    magic.users.logoutByIssuer(issuer)
+  ])
+
+  removeSession(res)
+
   res.writeHead(302, { Location: '/' })
   res.end()
 }

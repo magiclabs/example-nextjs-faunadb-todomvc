@@ -1,0 +1,39 @@
+# Step 1: Create a "users" collection
+CreateCollection({ name: "users" });
+
+# Step 2: Create "todos" and "lists" collections
+CreateCollection({ name: "todos", permissions: { create: Collection("users") } });
+CreateCollection({ name: "lists", permissions: { create: Collection("users") } });
+
+# Step 3: Create all relevant Indexes
+
+CreateIndex({
+  name: 'users_by_email',
+  source: Collection("users"),
+  terms: [{ field: ['data', 'email'] }],
+  unique: true
+});
+
+CreateIndex({
+  name: "all_users",
+  source: Collection("users")
+});
+
+CreateIndex({
+  name: "all_todos",
+  source: Collection("todos"),
+  permissions: { read: Collection("users") }
+});
+
+CreateIndex({
+  name: "all_lists",
+  source: Collection("lists"),
+  permissions: { read: Collection("users") }
+});
+
+CreateIndex({
+  name: "todos_by_list",
+  source: Collection("todos"),
+  terms: [{ field: ['data', 'list'] }],
+  permissions: { read: Collection("users") }
+});
