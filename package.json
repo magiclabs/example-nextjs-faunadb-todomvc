@@ -1,5 +1,5 @@
 {
-  "name": "magic-nextjs-faunadb-todomvc",
+  "name": "next-magic-faunadb-todomvc",
   "scripts": {
     "dev": "next",
     "build": "next build",
