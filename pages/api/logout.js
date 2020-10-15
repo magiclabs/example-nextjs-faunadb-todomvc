@@ -1,18 +1,26 @@
 import { magic } from '../../lib/magic'
 import { getClient, q } from '../../lib/faunadb'
 import { getSession, removeSession } from '../../lib/auth-cookies'
+import { createHandlers } from '../../lib/rest-utils'
 
-export default async function logout(req, res) {
-  const { token, issuer } = await getSession(req)
-  const client = getClient(token)
+const handlers = {
+  POST: async (req, res) => {
+    const { token, issuer } = await getSession(req)
+    const client = getClient(token)
 
-  await Promise.all([
-    client.query(q.Logout(true)),
-    magic.users.logoutByIssuer(issuer)
-  ])
+    await Promise.all([
+      client.query(q.Logout(true)),
+      magic.users.logoutByIssuer(issuer)
+    ])
 
-  removeSession(res)
+    removeSession(res)
 
-  res.writeHead(302, { Location: '/' })
-  res.end()
+    res.writeHead(302, { Location: '/' })
+    res.end()
+  }
+}
+
+export default function logout(req, res) {
+  const handler = createHandlers(handlers)
+  return handler(req, res)
 }

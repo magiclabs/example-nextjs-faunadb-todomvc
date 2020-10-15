@@ -1,6 +1,7 @@
 import { magic } from '../../lib/magic'
 import { createSession } from '../../lib/auth-cookies'
-import { q, client } from '../../lib/faunadb'
+import { q, client, getClient } from '../../lib/faunadb'
+import { createHandlers } from '../../lib/rest-utils'
 
 /**
  * Create a user in FaunaDB using the
@@ -37,8 +38,8 @@ function obtainToken(user, password) {
   )
 }
 
-export default async function login(req, res) {
-  try {
+const handlers = {
+  POST: async (req, res) => {
     const didToken = req.headers.authorization.substr(7)
     magic.token.validate(didToken, 'todomvc')
 
@@ -52,7 +53,10 @@ export default async function login(req, res) {
     await createSession(res, { token, email, issuer })
 
     res.status(200).send({ done: true })
-  } catch (error) {
-    res.status(error.status || 500).end(error.message)
   }
+}
+
+export default function login(req, res) {
+  const handler = createHandlers(handlers);
+  return handler(req, res);
 }

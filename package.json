@@ -10,6 +10,7 @@
     "@magic-sdk/admin": "1.2.2",
     "cookie": "0.4.0",
     "faunadb": "^3.0.1",
+    "lodash": "^4.17.20",
     "magic-sdk": "2.7.0",
     "next": "latest",
     "react": "latest",
