@@ -7,19 +7,21 @@ CreateCollection({ name: "todos", permissions: { create: Collection("users") } }
 # Step 3: Create all relevant Indexes
 
 CreateIndex({
-  name: 'users_by_email',
+  name: "users_by_email",
   source: Collection("users"),
-  terms: [{ field: ['data', 'email'] }],
+  terms: [{ field: ["data", "email"] }],
   unique: true
-});
-
-CreateIndex({
-  name: "all_users",
-  source: Collection("users")
 });
 
 CreateIndex({
   name: "all_todos",
   source: Collection("todos"),
+  permissions: { read: Collection("users") }
+});
+
+CreateIndex({
+  name: "todos_by_completed_state",
+  source: Collection("todos"),
+  terms: [{ field: ["data", "completed"] }],
   permissions: { read: Collection("users") }
 });

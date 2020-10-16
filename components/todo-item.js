@@ -1,35 +1,67 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react'
+import classNames from 'classnames'
 
 export default function TodoItem({ id, title, completed, loading, mutateTodos }) {
-  const [value, setValue] = useState(title)
+  const updateTodo = useCallback((data) => {
+    // Immediately update local state so we don't
+    // have to wait for remote server to finish processing the request.
+    mutateTodos(currTodos => {
+      return currTodos.map(todo => id === todo.id ? { ...todo, ...data }: todo)
+    }, false)
 
-  const handleTitleInputChange = useCallback((e) => {
-    setValue(e.target.value)
-  }, [])
+    // Send a `PATCH` request to update remote todo state,
+    // then re-validate our local todo state.
+    fetch(`/api/todo?id=${id}`, { method: 'PATCH', body: JSON.stringify(data) })
+      .then(() => mutateTodos())
+  }, [id])
 
-  const handleTitleInputBlur = useCallback((e) => {
-    if (!e.target.value) {
-      setValue(title)
-    } else {
-      setValue(e.target.value)
-    }
-  }, [])
-
-  const handleDelete = useCallback(async () => {
+  const deleteTodo = useCallback(async () => {
+    // Immediately remove the todo from local state so we don't
+    // have to wait for remote server to finish processing the request.
     mutateTodos(currTodos => [...currTodos].filter(todo => id !== todo.id), false)
+
+    // Send a `DELETE` request to update remote todo state,
+    // then re-validate our local todo state.
     await fetch(`/api/todo?id=${id}`, { method: 'DELETE' })
   }, [id])
 
+  const updateTodoCompletedStateOnInputChange = useCallback(async (e) => {
+    e.preventDefault()
+    updateTodo({ completed: !completed})
+  }, [updateTodo, completed])
+
+  const updateTodoTitleOnInputBlur = useCallback((e) => {
+    e.preventDefault()
+    if (e.target.value) {
+      updateTodoTitle({ title: e.target.value })
+    } else {
+      e.target.value = title
+    }
+  }, [updateTodo, title])
+
+  const updateTodoTitleOnPressEnter = useCallback((e) => {
+    if (e.keyCode === 13) {
+      updateTodoTitleOnInputBlur(e)
+    }
+  }, [updateTodoTitleOnInputBlur])
+
   return (<>
     <div className="todo">
-      <input disabled={loading} type="checkbox" />
       <input
-        className="title"
-        value={value}
+        className="checkbox"
+        disabled={loading}
+        type="checkbox"
+        checked={completed}
+        onChange={updateTodoCompletedStateOnInputChange} />
+
+      <input
+        className={classNames('title', completed && 'completed')}
+        defaultValue={title}
         placeholder={title}
-        onChange={handleTitleInputChange}
-        onBlur={handleTitleInputBlur} />
-      <button disabled={loading} onClick={handleDelete}>X</button>
+        onBlur={updateTodoTitleOnInputBlur}
+        onKeyDown={updateTodoTitleOnPressEnter} />
+
+      <button className="delete-button" disabled={loading} onClick={deleteTodo}>x</button>
     </div>
 
     <style jsx>{`
@@ -45,15 +77,47 @@ export default function TodoItem({ id, title, completed, loading, mutateTodos })
         font-size: 24px;
         font-weight: 100;
         color: #4d4d4d;
+        opacity: 1;
+        transition: all 0.2s;
       }
 
-      input::placeholder {
+      .title::placeholder {
         color: #e2dcff;
         font-style: italic;
       }
 
-      input:focus {
+      .title:focus {
         outline: none;
+      }
+
+      .title.completed {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
+
+      .todo:hover .delete-button {
+        opacity: 1;
+      }
+
+      .delete-button {
+        opacity: 0;
+        border: none;
+        background: transparent;
+        padding: 0 30px;
+        cursor: pointer;
+        color: #ff5635;
+        font-size: 20px;
+        font-weight: 100;
+        transform: scale(1);
+        transition: all 0.2s;
+      }
+
+      .delete-button:hover {
+        transform: scale(1.2);
+      }
+
+      .checkbox {
+        margin: 0 25px;
       }
     `}</style>
   </>)

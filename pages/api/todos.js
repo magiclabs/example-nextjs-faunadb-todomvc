@@ -8,7 +8,22 @@ const handlers = {
     const model = new TodoModel(token)
     const todos = await model.getAllTodos()
     res.status(200).json({ todos })
-  }
+  },
+
+  PATCH: async (req, res) => {
+    const { token } = await getSession(req)
+    const model = new TodoModel(token)
+    const data = JSON.parse(req.body)
+    await model.updateAllTodos(data)
+    res.status(200).json({ done: true })
+  },
+
+  DELETE: async (req, res) => {
+    const { token } = await getSession(req)
+    const model = new TodoModel(token)
+    await model.deleteCompletedTodos()
+    res.status(200).json({ done: true })
+  },
 }
 
 export default function todos(req, res) {

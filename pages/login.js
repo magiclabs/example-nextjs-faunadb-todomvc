@@ -3,6 +3,7 @@ import { useUser, useIsMounted } from '../lib/hooks'
 import { Magic } from 'magic-sdk'
 import { useRouter } from 'next/router'
 import Layout from '../components/layout'
+import Button from '../components/button'
 
 export default function Login() {
   const router = useRouter()
@@ -22,8 +23,7 @@ export default function Login() {
     if (isMounted() && errorMsg) setErrorMsg(undefined)
 
     try {
-      await magic.auth.loginWithMagicLink({ email })
-      const didToken = await magic.user.generateIdToken({ attachment: 'todomvc' })
+      const didToken = await magic.auth.loginWithMagicLink({ email })
 
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -60,7 +60,7 @@ export default function Login() {
         <label htmlFor="email">Email<span aria-hidden={true}>*</span></label>
         <input type="email" name="email" required placeholder="hello@magic.link" />
 
-        <button disabled={isLoggingIn} type="submit">Sign Up / Login</button>
+        <Button disabled={isLoggingIn} type="submit">Sign Up / Login</Button>
 
         {errorMsg && <p className="error">{errorMsg}</p>}
       </form>
@@ -100,26 +100,6 @@ export default function Login() {
         input:invalid {
           border-color: #d02f20;
           box-shadow: 0 0 0 3px #fba67f;
-        }
-
-        button {
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          background: #fff;
-          border: 1px solid #bdbdbd;
-          border-radius: 4px;
-          box-shadow: 0 0 0 3px transparent;
-          transition: all 0.2s;
-        }
-
-        button:hover {
-          border-color: #6851ff;
-        }
-
-        button:active, button:focus {
-          outline: none;
-          border-color: #6851ff;
-          box-shadow: 0 0 0 3px #a796ff;
         }
 
         .error {

@@ -2,17 +2,16 @@ import React, { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
 export default function AddTodo({ todos, mutateTodos }) {
-  const addTodo = useCallback(async (e) => {
+  const addTodo = useCallback((e) => {
     const title = e.target.value
     if (title) {
       e.preventDefault()
       e.target.value = ''
       const tempID = uuid()
 
-      // Immediately patch the todo data
-      await mutateTodos(currTodos => [...currTodos, { id: tempID, title, completed: false, loading: true }], false)
+      mutateTodos(currTodos => [...currTodos, { id: tempID, title, completed: false, loading: true }], false)
 
-      await fetch('/api/todo', {
+      fetch('/api/todo', {
           method: 'POST',
           body: JSON.stringify({ title })
         })
@@ -26,9 +25,29 @@ export default function AddTodo({ todos, mutateTodos }) {
     }
   }, [addTodo])
 
+  const hasActiveTodos = !!todos.find(todo => !todo.completed)
+
+  const toggleAllTodos = useCallback(() => {
+    if (hasActiveTodos) {
+      mutateTodos(currTodos => currTodos.map(todo => ({ ...todo, completed: true })), false)
+      fetch('/api/todos', { method: 'PATCH', body: JSON.stringify({ completed: true }) }).then(() => mutateTodos())
+    } else {
+      mutateTodos(currTodos => currTodos.map(todo => ({ ...todo, completed: false })), false)
+      fetch('/api/todos', { method: 'PATCH', body: JSON.stringify({ completed: false }) }).then(() => mutateTodos())
+    }
+  }, [hasActiveTodos])
+
   return (<>
     <div>
-      <button disabled={!todos.length}>❯</button>
+      <button
+        disabled={!todos.length}
+        onClick={toggleAllTodos}
+        aria-label={hasActiveTodos
+          ? 'Mark all todos as complete'
+          : 'Mark all todos as incomplete'}>
+          ❯
+      </button>
+
       <input
         aria-label="What needs to be done?"
         placeholder="What needs to be done?"
@@ -66,6 +85,12 @@ export default function AddTodo({ todos, mutateTodos }) {
         background: transparent;
         border: none;
         transform: rotate(90deg);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      button:hover {
+        color: #4d4d4d
       }
 
       button:disabled {
