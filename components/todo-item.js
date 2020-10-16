@@ -33,7 +33,7 @@ export default function TodoItem({ id, title, completed, loading, mutateTodos })
   const updateTodoTitleOnInputBlur = useCallback((e) => {
     e.preventDefault()
     if (e.target.value) {
-      updateTodoTitle({ title: e.target.value })
+      updateTodo({ title: e.target.value })
     } else {
       e.target.value = title
     }
