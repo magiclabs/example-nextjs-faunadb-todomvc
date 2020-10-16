@@ -1,6 +1,6 @@
 import { magic } from '../../lib/magic'
 import { createSession } from '../../lib/auth-cookies'
-import { q, client, getClient } from '../../lib/faunadb'
+import { q, client } from '../../lib/faunadb'
 import { createHandlers } from '../../lib/rest-utils'
 
 /**
@@ -21,7 +21,7 @@ function createUser(email, password) {
 function getUserByEmail(email) {
   return client.query(
     q.Get(q.Match(q.Index("users_by_email"), email))
-  )
+  ).catch(() => undefined)
 }
 
 /**

@@ -1,8 +1,11 @@
 import Head from 'next/head'
+import { useUser } from '../lib/hooks'
 import Header from './header'
 
-const Layout = (props) => (
-  <>
+export default function Layout({ children }) {
+  const { user } = useUser()
+
+  return (<>
     <Head>
       <title>Magic</title>
       <link rel="icon" href="/favicon.ico" />
@@ -11,7 +14,11 @@ const Layout = (props) => (
     <Header />
 
     <main>
-      <div className="container">{props.children}</div>
+      <div className="container">{children}</div>
+      {user && <div className="current-user">
+        <span>{user.email}</span>
+        <a href="/api/logout">Logout</a>
+      </div>}
     </main>
 
     <footer>
@@ -30,28 +37,46 @@ const Layout = (props) => (
       *::after {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         color: #333;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          'Helvetica Neue', Arial, Noto Sans, sans-serif, 'Apple Color Emoji',
-          'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
       }
+
       .container {
-        max-width: 42rem;
+        max-width: 550px;
         margin: 0 auto;
-        padding: 2rem 1.25rem;
+        border-radius: 10px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
       }
+
+      .current-user {
+        display: flex;
+        justify-content: flex-end;
+        max-width: 550px;
+        margin: 0 auto;
+        margin-top: 15px;
+      }
+
+      .current-user > span {
+        font-weight: 600;
+        margin-right: 10px;
+      }
+
+      .current-user > a {
+        margin-right: 25px;
+      }
+
       footer {
         width: 100%;
         height: 100px;
-        border-top: 1px solid #eaeaea;
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-top: 75px;
       }
     `}</style>
-  </>
-)
-
-export default Layout
+  </>)
+}

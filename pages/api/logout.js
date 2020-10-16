@@ -4,7 +4,7 @@ import { getSession, removeSession } from '../../lib/auth-cookies'
 import { createHandlers } from '../../lib/rest-utils'
 
 const handlers = {
-  POST: async (req, res) => {
+  GET: async (req, res) => {
     const { token, issuer } = await getSession(req)
     const client = getClient(token)
 

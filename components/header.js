@@ -1,67 +1,30 @@
 import Link from 'next/link'
 import { useUser } from '../lib/hooks'
 
-const Header = () => {
+export default function Header() {
   const user = useUser()
 
   return (
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <Link href="/">
-              <a>Home</a>
-            </Link>
-          </li>
-          {user ? (
-            <>
-              <li>
-                <Link href="/profile">
-                  <a>Profile</a>
-                </Link>
-              </li>
-              <li>
-                <a href="/api/logout">Logout</a>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link href="/login">
-                <a>Login</a>
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+    <>
+      <header>
+        <h1>Todos</h1>
+      </header>
+
       <style jsx>{`
-        nav {
-          max-width: 42rem;
-          margin: 0 auto;
-          padding: 0.2rem 1.25rem;
-        }
-        ul {
-          display: flex;
-          list-style: none;
-          margin-left: 0;
-          padding-left: 0;
-        }
-        li {
-          margin-right: 1rem;
-        }
-        li:first-child {
-          margin-left: auto;
-        }
-        a {
-          color: #fff;
-          text-decoration: none;
-        }
         header {
-          color: #fff;
-          background-color: #333;
+          padding: 50px 0 35px 0;
+        }
+
+        header h1 {
+          color: #e2dcff;
+          font-size: 100px;
+          font-weight: 100;
+          text-transform: lowercase;
+          text-align: center;
+          margin: 0;
+          line-height: 1;
         }
       `}</style>
-    </header>
+    </>
   )
 }
-
-export default Header
