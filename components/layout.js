@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import { useUser } from '../lib/hooks'
-import Header from './header'
 
 export default function Layout({ children }) {
   const { user } = useUser()
@@ -11,7 +10,9 @@ export default function Layout({ children }) {
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <Header />
+    <header>
+      <h1>Todos</h1>
+    </header>
 
     <main>
       <div className="container">{children}</div>
@@ -42,6 +43,20 @@ export default function Layout({ children }) {
         margin: 0;
         color: #333;
         font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+
+      header {
+        padding: 50px 0 35px 0;
+      }
+
+      header h1 {
+        color: #e2dcff;
+        font-size: 100px;
+        font-weight: 100;
+        text-transform: lowercase;
+        text-align: center;
+        margin: 0;
+        line-height: 1;
       }
 
       .container {

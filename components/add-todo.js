@@ -9,8 +9,12 @@ export default function AddTodo({ todos, mutateTodos }) {
       e.target.value = ''
       const tempID = uuid()
 
+      // Immediately update local state so we don't
+      // have to wait for remote server to finish processing the request.
       mutateTodos(currTodos => [...currTodos, { id: tempID, title, completed: false, loading: true }], false)
 
+      // Send a `POST` request to add remote todo state,
+      // then re-validate our local todo state.
       fetch('/api/todo', {
           method: 'POST',
           body: JSON.stringify({ title })
