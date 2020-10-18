@@ -1,6 +1,0 @@
-{
-  "env": {
-    "FAUNADB_SECRET_KEY": "@faunadb_secret_key_todomvc",
-    "MAGIC_SECRET_KEY": "@magic_secret_key_todomvc"
-  }
-}
