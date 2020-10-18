@@ -1,3 +1,9 @@
+# IMPORTANT NOTE: Run each step as a separate query to FaunaDB!
+#
+# Why?
+# Because step #2 depends on step #1
+# and it's better to be organized!
+
 # Step 1: Create a "users" collection
 CreateCollection({ name: "users" });
 
@@ -5,20 +11,17 @@ CreateCollection({ name: "users" });
 CreateCollection({ name: "todos", permissions: { create: Collection("users") } });
 
 # Step 3: Create all relevant Indexes
-
 CreateIndex({
   name: "users_by_email",
   source: Collection("users"),
   terms: [{ field: ["data", "email"] }],
   unique: true
 });
-
 CreateIndex({
   name: "all_todos",
   source: Collection("todos"),
   permissions: { read: Collection("users") }
 });
-
 CreateIndex({
   name: "todos_by_completed_state",
   source: Collection("todos"),
