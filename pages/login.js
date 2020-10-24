@@ -19,10 +19,10 @@ export default function Login() {
   }, [user]);
 
   const login = useCallback(async (email) => {
-    const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
     if (isMounted() && errorMsg) setErrorMsg(undefined)
 
     try {
+      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
       const didToken = await magic.auth.loginWithMagicLink({ email })
 
       const res = await fetch('/api/login', {
