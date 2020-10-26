@@ -67,6 +67,7 @@ export default function TodoItem({ id, title, completed, loading, mutateTodos })
     <style jsx>{`
       .todo {
         display: flex;
+        align-items: center;
         border-top: solid 1px #eeeeee;
       }
 
