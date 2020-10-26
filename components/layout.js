@@ -88,9 +88,20 @@ export default function Layout({ children }) {
         width: 100%;
         height: 100px;
         display: flex;
+        opacity: 0.5;
         justify-content: center;
         align-items: center;
         margin-top: 75px;
+      }
+
+      footer a {
+        display: inline-flex;
+        color: black;
+        text-decoration: none;
+      }
+
+      footer img {
+        margin-left: 3px;
       }
     `}</style>
   </>)
