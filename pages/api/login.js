@@ -10,8 +10,8 @@ const handlers = {
 
     const userModel = new UserModel()
     // We auto-detect signups if `getUserByEmail` resolves to `undefined`
-    const user = await userModel.getUserByEmail(email) ?? await userModel.createUser(email, issuer);
-    const token = await userModel.obtainFaunaDBToken(user, issuer);
+    const user = await userModel.getUserByEmail(email) ?? await userModel.createUser(email);
+    const token = await userModel.obtainFaunaDBToken(user);
 
     await createSession(res, { token, email, issuer })
 
