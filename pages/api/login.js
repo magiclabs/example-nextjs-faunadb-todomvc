@@ -6,6 +6,8 @@ import { UserModel } from '../../lib/models/user-model'
 const handlers = {
   POST: async (req, res) => {
     const didToken = magic.utils.parseAuthorizationHeader(req.headers.authorization)
+
+    magic.token.validate(didToken);
     const { email, issuer } = await magic.users.getMetadataByToken(didToken)
 
     const userModel = new UserModel()
