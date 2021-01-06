@@ -1,6 +1,6 @@
 # FaunaDB with Magic Authentication (featuring Next.js)
 
-Follow along with [the official tutorial](https://docs.magic.link/integrations/todomvc) to build your own FaunaDB-powered TodoMVC app with Magic passwordless login!
+Follow along with [the official tutorial](https://docs.magic.link/guides/todomvc) to build your own FaunaDB-powered TodoMVC app with Magic passwordless login!
 
 👉 See the [live demo](https://example-nextjs-faunadb-todomvc.vercel.app/login)
 
