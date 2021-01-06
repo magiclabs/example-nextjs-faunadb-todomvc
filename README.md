@@ -6,9 +6,9 @@ Follow along with [the official tutorial](https://docs.magic.link/guides/todomvc
 
 ## Deploy your own
 
-Deploy the example using [Vercel Now](https://vercel.com/docs/now-cli#commands/overview/basic-usage):
+Deploy the example with [Vercel](https://vercel.com/docs):
 
-[![Deploy with Vercel Now](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fmagiclabs%2Fexample-nextjs-faunadb-todomvc&env=NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY,MAGIC_SECRET_KEY,FAUNADB_SECRET_KEY,ENCRYPTION_SECRET)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fmagiclabs%2Fexample-nextjs-faunadb-todomvc&env=NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY,MAGIC_SECRET_KEY,FAUNADB_SECRET_KEY,ENCRYPTION_SECRET)
 
 ## Configuration
 
