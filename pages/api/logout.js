@@ -11,7 +11,13 @@ const handlers = {
     const { token, issuer } = await getSession(req)
 
     /* Step 5: Invalidate the user's token */
+    const magic = new Magic(process.env.MAGIC_SECRET_KEY)
+    const userModel = new UserModel()
 
+    await Promise.all([
+      userModel.invalidateFaunaDBToken(token),
+      magic.users.logoutByIssuer(issuer),
+    ])
     // As a final step, we'll clear our session cookie
     // (erasing it from the user's browser).
     removeSession(res)

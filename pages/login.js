@@ -23,19 +23,25 @@ export default function Login() {
 
     try {
       /* Step 4.1: Generate a DID token with Magic */
+      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
+      const didToken = await magic.auth.loginWithMagicLink({ email })
 
       /* Step 4.4: POST to our /login endpoint */
 
-      // const res = await fetch()
+      const res = await fetch('/api/login', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${didToken}`
+        },
+        body: JSON.stringify({ email })
+      })
 
-      // if (res.status === 200) {
-      //   // If we reach this line, it means our
-      //   // authentication succeeded, so we'll
-      //   // redirect to the home page!
-      //   router.push('/')
-      // } else {
-      //   throw new Error(await res.text())
-      // }
+      if (res.status === 200) {
+
+        router.push('/')
+      } else {
+        throw new Error(await res.text())
+      }
     } catch (err) {
       console.error('An unexpected error occurred:', err)
       if (isMounted()) setErrorMsg(err.message)
