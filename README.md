@@ -18,6 +18,8 @@ Login to the [Magic Dashboard](https://dashboard.magic.link/) to get API keys fo
 
 Next, you'll create a FaunaDB database for your application [here](https://dashboard.fauna.com/db-new/). Once you've configured your database, you'll need to prepare it for the schema expected by this example code. Execute the step-by-step queries found in [`init.fql`](./init.fql) from either [FaunaDB's CLI](https://github.com/fauna/fauna-shell) or FaunaDB's Dashboard shell interface. Finally, you'll need to acquire an admin access key for your database (located in the `"Security"` page of FaunaDB's Dashboard sidebar).
 
+Next, create a `32` random string as your encryption secret. You can create one in the terminal with openssl running `openssl rand -base64 24`
+
 Next, copy the `.env.local.example` file in this directory to `.env.local` (this file is intentionally ignored by Git):
 
 ```bash
@@ -29,7 +31,7 @@ Then, set each variable in `.env.local`:
 - `NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY` should look like `pk_test_abc` or `pk_live_ABC`
 - `MAGIC_SECRET_KEY` should look like `sk_test_ABC` or `sk_live_ABC`
 - `FAUNADB_SECRET_KEY` should look like `fnRB4Ld...`
-- `ENCRYPTION_SECRET` is a secret value you choose with at least 32 characters
+- `ENCRYPTION_SECRET` should look like a random string of `32` chars
 
 To complete your deployment on Vercel, you'll need to configure some environment variables with the [Environment Variables UI](https://vercel.com/blog/environment-variables-ui) or using the [Vercel CLI](https://vercel.com/download) ([Documentation](https://vercel.com/docs/cli#commands/env)).
 
