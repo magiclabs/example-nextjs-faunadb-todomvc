@@ -47,7 +47,7 @@ CreateRole({
                 todo: Get(Var("todoRef")),
                 userRef: Select(["data", "user"], Var("todo"))
               },
-              Equals(Var("userRef"), Identity())
+              Equals(Var("userRef"), CurrentIdentity())
             )
           )
         ),
