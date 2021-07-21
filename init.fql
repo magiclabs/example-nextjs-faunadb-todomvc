@@ -8,7 +8,7 @@
 CreateCollection({ name: "users" });
 
 # Step 2: Create "todos" collection
-CreateCollection({ name: "todos", permissions: { create: Collection("users") } });
+CreateCollection({ name: "todos" });
 
 # Step 3: Create all relevant Indexes
 CreateIndex({
@@ -20,11 +20,65 @@ CreateIndex({
 CreateIndex({
   name: "all_todos",
   source: Collection("todos"),
-  permissions: { read: Collection("users") }
 });
 CreateIndex({
   name: "todos_by_completed_state",
   source: Collection("todos"),
   terms: [{ field: ["data", "completed"] }],
-  permissions: { read: Collection("users") }
 });
+
+# Step 4: Add ABAC role
+CreateRole({
+  name: "todo-user-role",
+  membership: [
+    {
+      resource: Collection("users")
+    }
+  ],
+  privileges: [
+    {
+      resource: Collection("todos"),
+      actions: {
+        read: Query(
+          Lambda(
+            "todoRef",
+            Let(
+              {
+                todo: Get(Var("todoRef")),
+                userRef: Select(["data", "user"], Var("todo"))
+              },
+              Equals(Var("userRef"), Identity())
+            )
+          )
+        ),
+        write: true,
+        create: true,
+        delete: true,
+        history_read: false,
+        history_write: false,
+        unrestricted_read: false
+      }
+    },
+    {
+      resource: Index("all_todos"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    },
+    {
+      resource: Index("todos_by_completed_state"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    },
+    {
+      resource: Index("users_by_email"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    }
+  ]
+})
